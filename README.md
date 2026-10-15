@@ -24,3 +24,17 @@ npm run eval -- <model> <model> ...   # scoreboard across models
 - Every run is logged to `agent_runs` (model, output, valid?, latency, real $ cost).
 - The answer key (`expected_category`) is never exposed through the API.
 - The `agents` table is the roster: a retired agent does nothing and its work stays with humans.
+
+## Results so far (triage agent, 60 seeded tickets)
+
+| Model | Accuracy | Valid output | Self-corrected | $ / 100 tickets | Avg time |
+|---|---|---|---|---|---|
+| qwen3.5 9B, local via Ollama (no self-correction) | 88.3% | 88.3% | - | $0.00 | 10.4s |
+| qwen3.5 9B, local via Ollama (with self-correction) | **98.3%** | **100%** | 3 | $0.00 | 14.1s |
+
+What the scoreboard showed:
+- Without self-correction, every one of qwen's 7 failures had the **right category** but a bad format (6 times it dropped the required `urgent` field, once it wrote invalid JSON). Its judgement was fine; its formatting wasn't.
+- Fix: when an answer fails validation, the agent gets the exact error back ("urgent: Required") and one chance to correct it. Format failures went to zero.
+- The one remaining miss is a genuinely ambiguous ticket: "the cut line on #54 is cutting into my logo, can you reprint" was read as a change request rather than a quality complaint.
+
+Hosted models (Claude Sonnet 5.5, GPT-6.1, Grok 4.7, Llama 4 Maverick via OpenRouter) were also run, but a new account's credit and rate limits cut those runs short; the retry/back-off and provider-error accounting in `runAgent.ts` came out of that. Claude answered ~10 of its first 11 tickets correctly at about $0.005 per ticket before the limits hit.
