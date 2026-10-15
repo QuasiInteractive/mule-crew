@@ -62,6 +62,6 @@ CREATE TABLE agents (
 );
 
 INSERT INTO agents (name, model) VALUES
-  ('triage',     'anthropic/claude-sonnet-4.5'),
-  ('resolution', 'anthropic/claude-sonnet-4.5'),
-  ('artwork',    'anthropic/claude-sonnet-4.5');
+  ('triage',     'anthropic/claude-sonnet-5.5'),
+  ('resolution', 'anthropic/claude-sonnet-5.5'),
+  ('artwork',    'anthropic/claude-sonnet-5.5');

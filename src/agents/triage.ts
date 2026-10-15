@@ -28,6 +28,7 @@ If the ticket mentions an order number, call get_order to check it (status matte
 a change request on an order that is already printing or shipped is still change_request,
 but mark urgent=true). Mark urgent=true for VIP customers, events with deadlines, or
 double charges.
+In the summary, refer to the customer by name or as "the customer"; never guess their gender.
 Output JSON: {"category", "confidence" (0-1), "order_id" (number or null), "summary" (one short sentence), "urgent" (boolean)}.`;
 
 export function triage(model: string, ticket: { id: number; body: string; customerName: string }) {

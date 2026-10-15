@@ -1,6 +1,6 @@
 // Scoreboard: runs the triage agent on every ticket with each model and
 // compares against the answer key. Read-only: nothing is written to tickets.
-// Usage: npm run eval -- anthropic/claude-sonnet-4.5 openai/gpt-4o-mini x-ai/grok-3-mini
+// Usage: npm run eval -- anthropic/claude-sonnet-5.5 openai/gpt-4o-mini x-ai/grok-3-mini
 import 'dotenv/config';
 import { pool } from '../src/db.js';
 import { triage, type TriageOutput } from '../src/agents/triage.js';

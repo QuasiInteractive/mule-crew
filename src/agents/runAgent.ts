@@ -25,7 +25,17 @@ export async function runAgent<T>(opts: {
   tools: Tool[];
   schema: z.ZodType<T>;
   maxSteps?: number;
+  maxTokens?: number;
 }): Promise<AgentResult<T>> {
+  try {
+    return await loop(opts);
+  } catch (e) {
+    // A provider error (rate limit, credits, outage) fails this run, not the batch.
+    return { ok: false, output: { error: (e as Error).message.slice(0, 300) }, latencyMs: 0, costUsd: null, toolCalls: 0 };
+  }
+}
+
+async function loop<T>(opts: Parameters<typeof runAgent<T>>[0]): Promise<AgentResult<T>> {
   const started = Date.now();
   let cost = 0;
   let toolCalls = 0;
@@ -38,6 +48,9 @@ export async function runAgent<T>(opts: {
     const res = await client.chat.completions.create({
       model: opts.model,
       messages,
+      // Agents answer in short JSON; without a cap some providers reserve
+      // their whole output window per call, which burns credit limits.
+      max_tokens: opts.maxTokens ?? 800,
       tools: opts.tools.map((t) => ({ type: 'function', function: { name: t.name, description: t.description, parameters: t.parameters } })),
       // OpenRouter extension: include the real $ cost of each call in usage.
       // @ts-expect-error not in the OpenAI types
