@@ -1,0 +1,13 @@
+..........xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.
+x.........xxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.xx......xx.
+...x.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+........................................x..x..x.x.xxxxxx.xxx
+┌─────────┬───────────────────────────────┬────────────┬──────────────┬─────────────────┬────────┐
+│ (index) │ model                         │ accuracy % │ valid JSON % │ $ / 100 tickets │ avg ms │
+├─────────┼───────────────────────────────┼────────────┼──────────────┼─────────────────┼────────┤
+│ 0       │ 'anthropic/claude-sonnet-5.5' │ '18.3'     │ '18.3'       │ '0.105'         │ 991    │
+│ 1       │ 'openai/gpt-6.1-sol'          │ '33.3'     │ '33.3'       │ '0.061'         │ 1410   │
+│ 2       │ 'x-ai/grok-4.7'               │ '6.7'      │ '6.7'        │ '0.026'         │ 717    │
+│ 3       │ 'meta-llama/llama-4-maverick' │ '78.3'     │ '78.3'       │ '0.012'         │ 9548   │
+└─────────┴───────────────────────────────┴────────────┴──────────────┴─────────────────┴────────┘
+exit 0

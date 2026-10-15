@@ -8,7 +8,19 @@ import type { Tool } from '../tools/graphql.js';
 const client = new OpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
   apiKey: process.env.OPENROUTER_API_KEY,
+  // Retries 429s and 5xx with exponential back-off, honouring Retry-After.
+  maxRetries: 6,
 });
+
+// Pace calls so a new account stays under per-minute rate limits.
+const MIN_GAP_MS = Number(process.env.MIN_GAP_MS ?? 1500);
+let nextSlot = 0;
+async function paced() {
+  const now = Date.now();
+  const wait = Math.max(0, nextSlot - now);
+  nextSlot = Math.max(now, nextSlot) + MIN_GAP_MS;
+  if (wait) await new Promise((r) => setTimeout(r, wait));
+}
 
 export type AgentResult<T> = {
   ok: boolean;
@@ -16,6 +28,9 @@ export type AgentResult<T> = {
   latencyMs: number;
   costUsd: number | null;
   toolCalls: number;
+  // True when the provider failed (credits, rate limit, outage), as opposed to
+  // the model giving a bad answer. Evals exclude these from accuracy.
+  providerError?: boolean;
 };
 
 export async function runAgent<T>(opts: {
@@ -31,7 +46,7 @@ export async function runAgent<T>(opts: {
     return await loop(opts);
   } catch (e) {
     // A provider error (rate limit, credits, outage) fails this run, not the batch.
-    return { ok: false, output: { error: (e as Error).message.slice(0, 300) }, latencyMs: 0, costUsd: null, toolCalls: 0 };
+    return { ok: false, output: { error: (e as Error).message.slice(0, 300) }, latencyMs: 0, costUsd: null, toolCalls: 0, providerError: true };
   }
 }
 
@@ -45,6 +60,7 @@ async function loop<T>(opts: Parameters<typeof runAgent<T>>[0]): Promise<AgentRe
   ];
 
   for (let step = 0; step < (opts.maxSteps ?? 5); step++) {
+    await paced();
     const res = await client.chat.completions.create({
       model: opts.model,
       messages,

@@ -11,7 +11,7 @@ export const TriageOutput = z.object({
   category: z.enum(CATEGORIES),
   confidence: z.number().min(0).max(1),
   order_id: z.number().int().nullable(),
-  summary: z.string().max(200),
+  summary: z.string().max(280),
   urgent: z.boolean(),
 });
 export type TriageOutput = z.infer<typeof TriageOutput>;
