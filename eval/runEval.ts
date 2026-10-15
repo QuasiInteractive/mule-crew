@@ -13,9 +13,9 @@ async function main() {
   const tickets = (await pool.query(
     `SELECT t.id, t.body, t.expected_category, c.name FROM tickets t JOIN customers c ON c.id=t.customer_id ORDER BY t.id`)).rows;
 
-  const board: { model: string; ran: number; errors: number; accuracy: number; valid: number; costPer100: number; avgMs: number }[] = [];
+  const board: { model: string; ran: number; repaired: number; errors: number; accuracy: number; valid: number; costPer100: number; avgMs: number }[] = [];
   for (const model of models) {
-    let correct = 0, valid = 0, cost = 0, ms = 0, errors = 0;
+    let correct = 0, valid = 0, cost = 0, ms = 0, errors = 0, repaired = 0;
     for (const t of tickets) {
       const r = await triage(model, { id: t.id, body: t.body, customerName: t.name });
       await pool.query(
@@ -23,6 +23,7 @@ async function main() {
         ['triage:eval', model, t.id, JSON.stringify(r.output), r.ok, r.latencyMs, r.costUsd]);
       if (r.providerError) { errors++; process.stdout.write('!'); continue; }
       ms += r.latencyMs; cost += r.costUsd ?? 0;
+      if (r.repaired && r.ok) repaired++;
       if (r.ok) {
         valid++;
         if ((r.output as TriageOutput).category === t.expected_category) correct++;
@@ -34,6 +35,7 @@ async function main() {
     board.push({
       model,
       ran,
+      repaired,
       errors,
       accuracy: ran ? correct / ran : 0,
       valid: ran ? valid / ran : 0,
@@ -46,6 +48,7 @@ async function main() {
     model: b.model,
     'ran': b.ran,
     'provider errors': b.errors,
+    'self-corrected': b.repaired,
     'accuracy %': (b.accuracy * 100).toFixed(1),
     'valid JSON %': (b.valid * 100).toFixed(1),
     '$ / 100 tickets': b.costPer100.toFixed(3),

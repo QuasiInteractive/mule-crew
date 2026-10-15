@@ -5,12 +5,21 @@ import OpenAI from 'openai';
 import { z } from 'zod';
 import type { Tool } from '../tools/graphql.js';
 
-const client = new OpenAI({
+const openrouter = new OpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
   apiKey: process.env.OPENROUTER_API_KEY,
   // Retries 429s and 5xx with exponential back-off, honouring Retry-After.
   maxRetries: 6,
 });
+// Local open-source models via Ollama's OpenAI-compatible endpoint: free, no rate limits.
+const ollama = new OpenAI({ baseURL: process.env.OLLAMA_URL ?? 'http://localhost:11434/v1', apiKey: 'ollama' });
+
+// "ollama/qwen3.5:9b" runs locally; anything else goes to OpenRouter.
+function route(model: string) {
+  return model.startsWith('ollama/')
+    ? { client: ollama, model: model.slice('ollama/'.length), local: true }
+    : { client: openrouter, model, local: false };
+}
 
 // Pace calls so a new account stays under per-minute rate limits.
 const MIN_GAP_MS = Number(process.env.MIN_GAP_MS ?? 1500);
@@ -31,6 +40,8 @@ export type AgentResult<T> = {
   // True when the provider failed (credits, rate limit, outage), as opposed to
   // the model giving a bad answer. Evals exclude these from accuracy.
   providerError?: boolean;
+  // True when the first answer failed validation and the model fixed it on retry.
+  repaired?: boolean;
 };
 
 export async function runAgent<T>(opts: {
@@ -54,19 +65,22 @@ async function loop<T>(opts: Parameters<typeof runAgent<T>>[0]): Promise<AgentRe
   const started = Date.now();
   let cost = 0;
   let toolCalls = 0;
+  let repaired = false;
   const messages: OpenAI.ChatCompletionMessageParam[] = [
     { role: 'system', content: opts.system + '\n\nWhen you are done, reply with ONLY a JSON object matching the required output. No prose.' },
     { role: 'user', content: opts.user },
   ];
 
-  for (let step = 0; step < (opts.maxSteps ?? 5); step++) {
-    await paced();
-    const res = await client.chat.completions.create({
-      model: opts.model,
+  for (let step = 0; step < (opts.maxSteps ?? 6); step++) {
+    const r = route(opts.model);
+    if (!r.local) await paced();
+    const res = await r.client.chat.completions.create({
+      model: r.model,
       messages,
       // Agents answer in short JSON; without a cap some providers reserve
       // their whole output window per call, which burns credit limits.
-      max_tokens: opts.maxTokens ?? 800,
+      // Local reasoning models think before answering, so they get more room.
+      max_tokens: opts.maxTokens ?? (r.local ? 4000 : 800),
       tools: opts.tools.map((t) => ({ type: 'function', function: { name: t.name, description: t.description, parameters: t.parameters } })),
       // OpenRouter extension: include the real $ cost of each call in usage.
       // @ts-expect-error not in the OpenAI types
@@ -92,11 +106,29 @@ async function loop<T>(opts: Parameters<typeof runAgent<T>>[0]): Promise<AgentRe
       continue;
     }
 
-    const text = (msg.content ?? '').replace(/^```(?:json)?\s*|\s*```$/g, '').trim();
-    const parsed = (() => { try { return opts.schema.safeParse(JSON.parse(text)); } catch { return null; } })();
-    return parsed?.success
-      ? { ok: true, output: parsed.data, latencyMs: Date.now() - started, costUsd: cost, toolCalls }
-      : { ok: false, output: { error: `Invalid output: ${text.slice(0, 200)}` }, latencyMs: Date.now() - started, costUsd: cost, toolCalls };
+    const text = (msg.content ?? '')
+      .replace(/<think>[\s\S]*?<\/think>/g, '')      // reasoning models' scratchpad
+      .replace(/^```(?:json)?\s*|\s*```$/g, '')
+      .trim();
+    let problem: string;
+    try {
+      const parsed = opts.schema.safeParse(JSON.parse(text));
+      if (parsed.success) {
+        return { ok: true, output: parsed.data, latencyMs: Date.now() - started, costUsd: cost, toolCalls, repaired };
+      }
+      problem = parsed.error.issues.map((i) => `${i.path.join('.') || '(root)'}: ${i.message}`).join('; ');
+    } catch (e) {
+      problem = `not valid JSON (${(e as Error).message})`;
+    }
+
+    // Self-correction: show the model exactly what failed validation and let
+    // it fix its answer once, instead of throwing away a good judgement.
+    if (!repaired) {
+      repaired = true;
+      messages.push({ role: 'user', content: `Your answer failed validation: ${problem}. Reply with the corrected JSON object only.` });
+      continue;
+    }
+    return { ok: false, output: { error: `Invalid output (${problem}): ${text.slice(0, 160)}` }, latencyMs: Date.now() - started, costUsd: cost, toolCalls, repaired };
   }
   return { ok: false, output: { error: 'Ran out of steps' }, latencyMs: Date.now() - started, costUsd: cost, toolCalls };
 }
