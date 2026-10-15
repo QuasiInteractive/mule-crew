@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: mule
+      POSTGRES_PASSWORD: mule
+      POSTGRES_DB: mulecrew
+    ports:
+      - "5544:5432"
+    volumes:
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro

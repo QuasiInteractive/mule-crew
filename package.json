@@ -1,0 +1,33 @@
+{
+  "name": "mule-crew",
+  "version": "1.0.0",
+  "description": "A small crew of AI agents running a (synthetic) sticker shop, with a scoreboard that measures and retires them.",
+  "main": "index.js",
+  "scripts": {
+    "db:up": "docker compose up -d",
+    "seed": "tsx src/seed.ts",
+    "api": "tsx src/api.ts",
+    "triage": "tsx src/runTriage.ts",
+    "eval": "tsx eval/runEval.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@faker-js/faker": "^10.6.0",
+    "dotenv": "^18.0.8",
+    "graphql": "^17.0.2",
+    "graphql-yoga": "^5.24.5",
+    "openai": "^7.34.0",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/pg": "^8.23.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
