@@ -11,7 +11,8 @@
     "eval": "tsx eval/runEval.ts",
     "typecheck": "tsc --noEmit",
     "resolve-eval": "tsx eval/resolveEval.ts",
-    "guardrails": "tsx eval/guardrails.ts"
+    "guardrails": "tsx eval/guardrails.ts",
+    "retire": "tsx src/retire.ts"
   },
   "keywords": [],
   "author": "",

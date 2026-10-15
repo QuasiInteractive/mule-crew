@@ -11,7 +11,7 @@ async function main() {
   const models = process.argv.slice(2);
   if (!models.length) throw new Error('Pass one or more OpenRouter model ids');
   const tickets = (await pool.query(
-    `SELECT t.id, t.body, t.expected_category, c.name FROM tickets t JOIN customers c ON c.id=t.customer_id ORDER BY t.id`)).rows;
+    `SELECT t.id, t.body, t.expected_category, c.name FROM tickets t JOIN customers c ON c.id=t.customer_id ORDER BY (t.id % 10), t.id LIMIT $1`, [Number(process.env.EVAL_LIMIT ?? 1000)])).rows; // id % 10 interleaves categories so a limited run is a fair sample
 
   const board: { model: string; ran: number; repaired: number; errors: number; accuracy: number; valid: number; costPer100: number; avgMs: number }[] = [];
   for (const model of models) {

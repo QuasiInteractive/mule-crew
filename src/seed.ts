@@ -44,7 +44,7 @@ const TEMPLATES: Record<string, string[]> = {
 };
 
 async function main() {
-  await pool.query('TRUNCATE agent_runs, replies, reprints, escalations, order_changes, tickets, orders, customers RESTART IDENTITY CASCADE');
+  await pool.query('TRUNCATE replies, reprints, escalations, order_changes, tickets, orders, customers RESTART IDENTITY CASCADE');
 
   const customerIds: number[] = [];
   for (let i = 0; i < 60; i++) {
