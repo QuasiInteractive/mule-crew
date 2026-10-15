@@ -9,11 +9,21 @@ const call = async (name: string, sig: string, args: string, vars: Record<string
 // Tools for one ticket. `orderId` is the order the ticket is about (if any):
 // the agent must look it up before replying, enforced here rather than in the
 // prompt, because a model that answers from memory invents order details.
-export const actionTools = (ticketId: number, orderId: number | null): Tool[] => {
+export type TrailEntry = { tool: string; ok: boolean; message: string };
+
+export const actionTools = (ticketId: number, orderId: number | null, trail: TrailEntry[] = []): Tool[] => {
   let looked = orderId == null;
   const lookup: Tool = { ...getOrder, run: async (a) => { looked = true; return getOrder.run(a); } };
+  // Every action's real result is recorded, so the caller can check the
+  // agent's own report against what actually happened.
+  const record = (tool: Tool): Tool => ({ ...tool, run: async (a) => {
+    const r = (await tool.run(a)) as { ok: boolean; message: string };
+    trail.push({ tool: tool.name, ok: r.ok, message: r.message });
+    return r;
+  } });
   return [
   lookup,
+  ...(<Tool[]>[
   {
     name: 'change_order_size',
     description: 'Change the sticker size on an order. Only allowed before printing starts.',
@@ -52,5 +62,6 @@ export const actionTools = (ticketId: number, orderId: number | null): Tool[] =>
     parameters: { type: 'object', properties: {}, required: [] },
     run: () => call('closeAsSpam', '$t:Int!', 'ticketId:$t', { t: ticketId }),
   },
-];
+]).map(record),
+  ];
 };

@@ -38,3 +38,20 @@ What the scoreboard showed:
 - The one remaining miss is a genuinely ambiguous ticket: "the cut line on #54 is cutting into my logo, can you reprint" was read as a change request rather than a quality complaint.
 
 Hosted models (Claude Sonnet 5.5, GPT-6.1, Grok 4.7, Llama 4 Maverick via OpenRouter) were also run, but a new account's credit and rate limits cut those runs short; the retry/back-off and provider-error accounting in `runAgent.ts` came out of that. Claude answered ~10 of its first 11 tickets correctly at about $0.005 per ticket before the limits hit.
+
+## Day 2: resolution agent (acts on its own, inside hard limits)
+
+The resolution agent takes a triaged ticket and handles it with tools: look up the order, change size or quantity, issue a free reprint, reply, close spam, or escalate to a human with a summary.
+
+Limits live in the API, not the prompt (`npm run guardrails` attacks them directly; all 6 hold):
+- size/quantity changes only before printing; reprints only for received orders, under $150, once per order
+- an agent can only touch the ticket customer's own orders; only spam-triaged tickets can be closed without a reply
+- refunds have no tool at all, so they always reach a human
+- **look before you reply**: the reply tool refuses until the order has been looked up (added after the agent answered one ticket from memory and invented the order's size)
+- **trust but verify**: every tool result is recorded, and if the agent's report claims an action that didn't actually succeed, the run is failed (added after the agent twice reported "reply sent" when the reply had been refused)
+
+| Model | Correct handling | Unsafe actions | Avg time | Cost |
+|---|---|---|---|---|
+| qwen3.5 9B, local via Ollama | **96.7%** (58/60) | **0** | 24.7s | $0 |
+
+The 2 misses were the "reply sent" claims above, which is what led to the verification step.

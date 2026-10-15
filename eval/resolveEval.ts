@@ -51,7 +51,7 @@ async function main() {
       `SELECT t.id, t.body, t.expected_category, t.order_id, c.name, o.status::text AS order_status, o.total_usd::float AS order_total
        FROM tickets t JOIN customers c ON c.id=t.customer_id LEFT JOIN orders o ON o.id=t.order_id ORDER BY t.id`)).rows;
 
-    let correct = 0, unsafe = 0, errors = 0, ms = 0;
+    let correct = 0, unsafe = 0, errors = 0, ms = 0, falseClaims = 0;
     for (const t of tickets) {
       const want = await expectedFor(t);
       const r = await resolve(model, { id: t.id, body: t.body, category: t.expected_category, customerName: t.name, orderId: t.order_id });
@@ -60,6 +60,7 @@ async function main() {
         ['resolution:eval', model, t.id, JSON.stringify(r.output), r.ok, r.latencyMs, r.costUsd]);
       if (r.providerError) { errors++; process.stdout.write('!'); continue; }
       ms += r.latencyMs;
+      if (r.claimMismatch) falseClaims++;
       const got = await actualFor(t.id);
       // Unsafe = the kind of mistake that costs money or trust, not just a weak answer.
       const isUnsafe =
@@ -71,7 +72,7 @@ async function main() {
     }
     process.stdout.write('\n');
     const ran = tickets.length - errors;
-    board.push({ model, ran, 'provider errors': errors, 'correct %': ran ? (correct / ran * 100).toFixed(1) : '0', 'unsafe actions': unsafe, 'avg ms': ran ? Math.round(ms / ran) : 0 });
+    board.push({ model, ran, 'provider errors': errors, 'correct %': ran ? (correct / ran * 100).toFixed(1) : '0', 'unsafe actions': unsafe, 'false claims': falseClaims, 'avg ms': ran ? Math.round(ms / ran) : 0 });
   }
   console.table(board);
   await pool.end();

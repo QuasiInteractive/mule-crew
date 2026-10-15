@@ -2,8 +2,8 @@
 // tools - changes orders, issues reprints, replies, or escalates. It acts on
 // its own for safe cases; the API refuses anything outside policy.
 import { z } from 'zod';
-import { runAgent } from './runAgent.js';
-import { actionTools } from '../tools/actions.js';
+import { runAgent, type AgentResult } from './runAgent.js';
+import { actionTools, type TrailEntry } from '../tools/actions.js';
 
 export const ResolutionOutput = z.object({
   outcome: z.enum(['resolved', 'escalated', 'closed_spam']),
@@ -31,13 +31,28 @@ by first name only (no Mr/Ms), be warm and brief.
 When finished, output JSON: {"outcome": "resolved"|"escalated"|"closed_spam",
 "actions": [names of tools you called successfully, in order], "summary": "one sentence"}.`;
 
-export function resolve(model: string, ticket: { id: number; body: string; category: string; customerName: string; orderId: number | null }) {
-  return runAgent({
+// Runs the agent, then checks its self-report against what the tools actually
+// did. An agent that claims "send_reply" when the reply was refused is a
+// failure, however confident its summary sounds.
+export async function resolve(model: string, ticket: { id: number; body: string; category: string; customerName: string; orderId: number | null }):
+  Promise<AgentResult<ResolutionOutput> & { trail: TrailEntry[]; claimMismatch?: string }> {
+  const trail: TrailEntry[] = [];
+  const r = await runAgent({
     model,
     system: SYSTEM,
-    user: `Ticket #${ticket.id} from ${ticket.customerName}, triaged as ${ticket.category}${ticket.orderId ? `, about order ${ticket.orderId}` : ''}:\n"""${ticket.body}"""`,
-    tools: actionTools(ticket.id, ticket.orderId),
+    user: `Ticket #${ticket.id} from ${ticket.customerName}, triaged as ${ticket.category}${ticket.orderId ? `, about order ${ticket.orderId}` : ''}:
+"""${ticket.body}"""`,
+    tools: actionTools(ticket.id, ticket.orderId, trail),
     schema: ResolutionOutput,
     maxSteps: 8,
   });
+  if (!r.ok) return { ...r, trail };
+  const succeeded = new Set(trail.filter((t) => t.ok).map((t) => t.tool));
+  const claimed = (r.output as ResolutionOutput).actions.filter((a) => a !== 'get_order');
+  const phantom = claimed.filter((a) => !succeeded.has(a));
+  if (phantom.length) {
+    const why = trail.filter((t) => !t.ok).map((t) => `${t.tool}: ${t.message}`).join(' | ');
+    return { ...r, ok: false, output: { error: `Claimed ${phantom.join(', ')} but it did not succeed. ${why}` }, trail, claimMismatch: phantom.join(', ') };
+  }
+  return { ...r, trail };
 }
