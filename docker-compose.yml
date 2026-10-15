@@ -9,3 +9,4 @@ services:
       - "5544:5432"
     volumes:
       - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./db/002_resolution.sql:/docker-entrypoint-initdb.d/02_resolution.sql:ro

@@ -9,7 +9,9 @@
     "api": "tsx src/api.ts",
     "triage": "tsx src/runTriage.ts",
     "eval": "tsx eval/runEval.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "resolve-eval": "tsx eval/resolveEval.ts",
+    "guardrails": "tsx eval/guardrails.ts"
   },
   "keywords": [],
   "author": "",
