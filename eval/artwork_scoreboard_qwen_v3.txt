@@ -1,0 +1,39 @@
+x
+  art_01.png want [low_contrast] -> Ignored measured failure(s): low_contrast (verdict approve)
+.................~
+  art_19.png want [] got needs_changes [low_resolution]
+.~
+  art_21.png want [low_contrast] got needs_changes [low_contrast,text_near_edge]
+......~
+  art_28.png want [upscaled_blurry,text_near_edge] got needs_changes [low_resolution,background_not_removed,upscaled_blurry,text_near_edge]
+.~
+  art_30.png want [] got needs_changes [background_not_removed]
+~
+  art_31.png want [low_resolution,background_not_removed] got needs_changes [low_resolution,background_not_removed,text_near_edge]
+.
+┌──────────────────────┬─────────────────────┐
+│ (index)              │ Values              │
+├──────────────────────┼─────────────────────┤
+│ model                │ 'ollama/qwen3.5:9b' │
+│ ran                  │ 32                  │
+│ provider errors      │ 0                   │
+│ verdict %            │ '90.6'              │
+│ exact issues %       │ '81.3'              │
+│ bad files approved   │ 0                   │
+│ good files rejected  │ 2                   │
+│ ignored measurements │ 1                   │
+│ invalid              │ 0                   │
+│ self-corrected       │ 2                   │
+│ avg ms               │ 2134                │
+└──────────────────────┴─────────────────────┘
+Issues caught (caught/present), and issues reported that were not there:
+┌────────────────────────┬────────┐
+│ (index)                │ Values │
+├────────────────────────┼────────┤
+│ low_resolution         │ '5/5'  │
+│ background_not_removed │ '5/5'  │
+│ text_near_edge         │ '5/5'  │
+│ upscaled_blurry        │ '5/5'  │
+│ low_contrast           │ '3/3'  │
+└────────────────────────┴────────┘
+invented issues: 6

@@ -1,0 +1,51 @@
+..U
+  art_03.png want [text_near_edge] got approve []
+~
+  art_04.png want [low_resolution] got needs_changes [low_resolution,text_near_edge]
+......x
+  art_11.png want [] -> Invalid output (issues: approve must have no issues; needs_changes must list at least one): {
+  "verdict": "needs_changes",
+  "issues": [],
+  "customer_note": ""
+}
+...U
+  art_15.png want [text_near_edge] got approve []
+......U
+  art_22.png want [text_near_edge] got approve []
+...~
+  art_26.png want [] got needs_changes [text_near_edge]
+~
+  art_27.png want [] got needs_changes [low_contrast]
+~
+  art_28.png want [upscaled_blurry,text_near_edge] got needs_changes [upscaled_blurry]
+..~
+  art_31.png want [low_resolution,background_not_removed] got needs_changes [low_resolution,background_not_removed,text_near_edge]
+U
+  art_32.png want [text_near_edge] got approve []
+
+┌──────────────────────┬─────────────────────┐
+│ (index)              │ Values              │
+├──────────────────────┼─────────────────────┤
+│ model                │ 'ollama/qwen3.5:9b' │
+│ ran                  │ 32                  │
+│ provider errors      │ 0                   │
+│ verdict %            │ '78.1'              │
+│ exact issues %       │ '68.8'              │
+│ bad files approved   │ 4                   │
+│ good files rejected  │ 2                   │
+│ ignored measurements │ 0                   │
+│ invalid              │ 1                   │
+│ self-corrected       │ 3                   │
+│ avg ms               │ 2188                │
+└──────────────────────┴─────────────────────┘
+Issues caught (caught/present), and issues reported that were not there:
+┌────────────────────────┬────────┐
+│ (index)                │ Values │
+├────────────────────────┼────────┤
+│ low_resolution         │ '5/5'  │
+│ background_not_removed │ '5/5'  │
+│ text_near_edge         │ '0/5'  │
+│ upscaled_blurry        │ '5/5'  │
+│ low_contrast           │ '4/4'  │
+└────────────────────────┴────────┘
+invented issues: 4

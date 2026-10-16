@@ -1,0 +1,55 @@
+~
+  art_01.png want [low_contrast] got needs_changes [text_near_edge,low_contrast]
+.U
+  art_03.png want [text_near_edge] got approve []
+~
+  art_04.png want [low_resolution] got needs_changes [low_resolution,upscaled_blurry]
+U
+  art_05.png want [low_contrast] got approve []
+~
+  art_06.png want [] got needs_changes [background_not_removed]
+.~
+  art_08.png want [upscaled_blurry] got needs_changes [upscaled_blurry,low_contrast]
+....U
+  art_13.png want [upscaled_blurry] got approve []
+U
+  art_14.png want [upscaled_blurry] got approve []
+U
+  art_15.png want [text_near_edge] got approve []
+..U
+  art_18.png want [low_contrast] got approve []
+..U
+  art_21.png want [low_contrast] got approve []
+~
+  art_22.png want [text_near_edge] got needs_changes [background_not_removed]
+...~
+  art_26.png want [] got needs_changes [low_contrast]
+.~
+  art_28.png want [upscaled_blurry,text_near_edge] got needs_changes [text_near_edge,background_not_removed]
+....
+┌──────────────────────┬─────────────────────┐
+│ (index)              │ Values              │
+├──────────────────────┼─────────────────────┤
+│ model                │ 'ollama/qwen3.5:9b' │
+│ ran                  │ 32                  │
+│ provider errors      │ 0                   │
+│ verdict %            │ '71.9'              │
+│ exact issues %       │ '56.3'              │
+│ bad files approved   │ 7                   │
+│ good files rejected  │ 2                   │
+│ ignored measurements │ 0                   │
+│ invalid              │ 0                   │
+│ self-corrected       │ 1                   │
+│ avg ms               │ 1909                │
+└──────────────────────┴─────────────────────┘
+Issues caught (caught/present), and issues reported that were not there:
+┌────────────────────────┬────────┐
+│ (index)                │ Values │
+├────────────────────────┼────────┤
+│ low_resolution         │ '5/5'  │
+│ background_not_removed │ '5/5'  │
+│ text_near_edge         │ '2/5'  │
+│ upscaled_blurry        │ '2/5'  │
+│ low_contrast           │ '1/4'  │
+└────────────────────────┴────────┘
+invented issues: 7

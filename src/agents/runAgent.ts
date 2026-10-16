@@ -52,6 +52,11 @@ export async function runAgent<T>(opts: {
   schema: z.ZodType<T>;
   maxSteps?: number;
   maxTokens?: number;
+  // Image data URLs shown to the model alongside the user message (vision models).
+  images?: string[];
+  // Set false to skip a local reasoning model's thinking pass. For quick visual
+  // judgements it is faster and, measured on the artwork eval, no less accurate.
+  think?: boolean;
 }): Promise<AgentResult<T>> {
   try {
     return await loop(opts);
@@ -68,7 +73,12 @@ async function loop<T>(opts: Parameters<typeof runAgent<T>>[0]): Promise<AgentRe
   let repaired = false;
   const messages: OpenAI.ChatCompletionMessageParam[] = [
     { role: 'system', content: opts.system + '\n\nWhen you are done, reply with ONLY a JSON object matching the required output. No prose.' },
-    { role: 'user', content: opts.user },
+    {
+      role: 'user',
+      content: opts.images?.length
+        ? [{ type: 'text', text: opts.user }, ...opts.images.map((url) => ({ type: 'image_url' as const, image_url: { url } }))]
+        : opts.user,
+    },
   ];
 
   for (let step = 0; step < (opts.maxSteps ?? 6); step++) {
@@ -82,6 +92,7 @@ async function loop<T>(opts: Parameters<typeof runAgent<T>>[0]): Promise<AgentRe
       // Local reasoning models think before answering, so they get more room.
       max_tokens: opts.maxTokens ?? (r.local ? 4000 : 800),
       tools: opts.tools.map((t) => ({ type: 'function', function: { name: t.name, description: t.description, parameters: t.parameters } })),
+      ...(r.local && opts.think === false ? { reasoning_effort: 'none' as const } : {}),
       // OpenRouter extension: include the real $ cost of each call in usage.
       // @ts-expect-error not in the OpenAI types
       usage: { include: true },

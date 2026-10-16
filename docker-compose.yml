@@ -11,3 +11,4 @@ services:
       - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
       - ./db/002_resolution.sql:/docker-entrypoint-initdb.d/02_resolution.sql:ro
       - ./db/003_keep_history.sql:/docker-entrypoint-initdb.d/03_keep_history.sql:ro
+      - ./db/004_artwork.sql:/docker-entrypoint-initdb.d/04_artwork.sql:ro

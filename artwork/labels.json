@@ -1,0 +1,272 @@
+[
+ {
+  "file": "art_01.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": [
+   "low_contrast"
+  ]
+ },
+ {
+  "file": "art_02.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": []
+ },
+ {
+  "file": "art_03.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": [
+   "text_near_edge"
+  ]
+ },
+ {
+  "file": "art_04.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": [
+   "low_resolution"
+  ]
+ },
+ {
+  "file": "art_05.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "low_contrast"
+  ]
+ },
+ {
+  "file": "art_06.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": []
+ },
+ {
+  "file": "art_07.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": []
+ },
+ {
+  "file": "art_08.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "upscaled_blurry"
+  ]
+ },
+ {
+  "file": "art_09.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": []
+ },
+ {
+  "file": "art_10.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "background_not_removed"
+  ]
+ },
+ {
+  "file": "art_11.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": []
+ },
+ {
+  "file": "art_12.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "background_not_removed"
+  ]
+ },
+ {
+  "file": "art_13.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "upscaled_blurry"
+  ]
+ },
+ {
+  "file": "art_14.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": [
+   "upscaled_blurry"
+  ]
+ },
+ {
+  "file": "art_15.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "text_near_edge"
+  ]
+ },
+ {
+  "file": "art_16.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "low_resolution"
+  ]
+ },
+ {
+  "file": "art_17.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "upscaled_blurry"
+  ]
+ },
+ {
+  "file": "art_18.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": [
+   "low_contrast"
+  ]
+ },
+ {
+  "file": "art_19.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": []
+ },
+ {
+  "file": "art_20.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "background_not_removed"
+  ]
+ },
+ {
+  "file": "art_21.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "low_contrast"
+  ]
+ },
+ {
+  "file": "art_22.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "text_near_edge"
+  ]
+ },
+ {
+  "file": "art_23.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "low_resolution"
+  ]
+ },
+ {
+  "file": "art_24.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": []
+ },
+ {
+  "file": "art_25.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": [
+   "background_not_removed"
+  ]
+ },
+ {
+  "file": "art_26.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": []
+ },
+ {
+  "file": "art_27.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": []
+ },
+ {
+  "file": "art_28.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "upscaled_blurry",
+   "text_near_edge"
+  ]
+ },
+ {
+  "file": "art_29.png",
+  "product": "die_cut_sticker",
+  "width_in": 4,
+  "height_in": 4,
+  "issues": [
+   "low_resolution"
+  ]
+ },
+ {
+  "file": "art_30.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": []
+ },
+ {
+  "file": "art_31.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": [
+   "low_resolution",
+   "background_not_removed"
+  ]
+ },
+ {
+  "file": "art_32.png",
+  "product": "die_cut_sticker",
+  "width_in": 3,
+  "height_in": 3,
+  "issues": [
+   "text_near_edge"
+  ]
+ }
+]

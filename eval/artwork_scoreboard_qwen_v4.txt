@@ -1,0 +1,30 @@
+............................x
+  art_29.png [low_resolution] -> Customer note says ready to print on a rejected file. Note: Your sticker file is ready to print, but it’s a bit blurry—please send us the original at 300 dpi sized for your order.
+...
+┌──────────────────────────────┬─────────────────────┐
+│ (index)                      │ Values              │
+├──────────────────────────────┼─────────────────────┤
+│ model                        │ 'ollama/qwen3.5:9b' │
+│ verdict % (code)             │ '100.0'             │
+│ exact issues % (code)        │ '100.0'             │
+│ bad files approved           │ 0                   │
+│ good files rejected          │ 0                   │
+│ notes complete % (model)     │ '96.9'              │
+│ notes missing an issue       │ 0                   │
+│ 'ready to print' on a reject │ 1                   │
+│ invalid                      │ 0                   │
+│ concerns on clean files      │ '0/10'              │
+│ self-corrected               │ 0                   │
+│ provider errors              │ 0                   │
+│ avg ms                       │ 1637                │
+└──────────────────────────────┴─────────────────────┘
+Issues caught by measurement (caught/present):
+┌────────────────────────┬────────┐
+│ (index)                │ Values │
+├────────────────────────┼────────┤
+│ low_resolution         │ '5/5'  │
+│ background_not_removed │ '5/5'  │
+│ text_near_edge         │ '5/5'  │
+│ upscaled_blurry        │ '5/5'  │
+│ low_contrast           │ '4/4'  │
+└────────────────────────┴────────┘
