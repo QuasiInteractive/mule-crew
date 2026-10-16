@@ -2,10 +2,12 @@
 
 A small crew of AI agents running a **synthetic** sticker shop, with a scoreboard that measures each agent per model and retires the ones that stop delivering.
 
+**Dashboard snapshot:** https://quasiinteractive.github.io/mule-crew/ (the agents run on a local GPU, so the hosted page is a frozen copy; `npm run snapshot` refreshes it).
+
 Built as a demo for an "agent engineer" role. All data is fake (seeded), modelled on public sticker products. Built with AI-assisted development (Claude Code), reviewed and tested by me.
 
 ## Stack
-TypeScript, Postgres, GraphQL (graphql-yoga), OpenRouter (Claude / GPT / Grok / Llama behind one API), zod-validated agent outputs. Models with an `ollama/` prefix run locally (qwen3.5 9B on an RTX 4060, $0). Cloud Run deploy: in progress.
+TypeScript, Postgres, GraphQL (graphql-yoga), OpenRouter (Claude / GPT / Grok / Llama behind one API), zod-validated agent outputs. Models with an `ollama/` prefix run locally (qwen3.5 9B on an RTX 4060, $0).
 
 ## Run it
 ```
