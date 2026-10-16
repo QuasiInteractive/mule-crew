@@ -1,0 +1,39 @@
+{
+  "_note": "Scoreboard results that changed the design. Each entry is copied from the eval/*.txt file named in `source`.",
+  "changes": [
+    {
+      "agent": "triage",
+      "found": "7 of 60 answers failed validation, and 6 of those had the right category but dropped a required field",
+      "change": "Show the model its exact validation errors and give it one retry",
+      "before": { "label": "accuracy", "value": 88.3 },
+      "after": { "label": "accuracy", "value": 98.3 },
+      "source": "scoreboard_local_qwen.txt -> scoreboard_local_qwen_v2.txt"
+    },
+    {
+      "agent": "resolution",
+      "found": "It answered a customer from memory and invented the order's size",
+      "change": "The reply tool refuses until the order has been looked up (enforced in code)",
+      "source": "resolution_scoreboard_qwen.txt"
+    },
+    {
+      "agent": "resolution",
+      "found": "It twice reported 'reply sent' when the reply had been refused",
+      "change": "Every tool result is recorded; a run whose report claims an action that did not succeed is failed",
+      "source": "resolution_scoreboard_qwen.txt"
+    },
+    {
+      "agent": "artwork",
+      "found": "The vision model approved 7 of 22 bad files and caught 0 of 5 cut-line problems",
+      "change": "Code measures and decides (dpi, transparency, sharpness, contrast, safe zone); the model writes the customer note",
+      "before": { "label": "bad files approved", "value": 7 },
+      "after": { "label": "bad files approved", "value": 0 },
+      "source": "artwork_scoreboard_qwen_v1.txt -> artwork_scoreboard_qwen_v4.txt"
+    }
+  ],
+  "artworkVersions": [
+    { "version": "v1", "label": "Model decides", "verdictPct": 71.9, "badApproved": 7, "goodRejected": 2 },
+    { "version": "v2", "label": "+ blur, contrast", "verdictPct": 78.1, "badApproved": 4, "goodRejected": 2 },
+    { "version": "v3", "label": "+ safe zone", "verdictPct": 90.6, "badApproved": 0, "goodRejected": 2 },
+    { "version": "v4", "label": "Code decides", "verdictPct": 100, "badApproved": 0, "goodRejected": 0 }
+  ]
+}

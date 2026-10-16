@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { createServer } from 'node:http';
 import { createSchema, createYoga } from 'graphql-yoga';
 import { pool } from './db.js';
+import { dashboardRoutes } from './dashboard.js';
 
 const typeDefs = /* GraphQL */ `
   type Customer { id: Int!, name: String!, email: String!, country: String!, isVip: Boolean! }
@@ -153,4 +154,12 @@ const resolvers = {
 export const yoga = createYoga({ schema: createSchema({ typeDefs, resolvers }) });
 
 const port = Number(process.env.PORT ?? 4000);
-createServer(yoga).listen(port, () => console.log(`GraphQL API on http://localhost:${port}/graphql`));
+createServer(async (req, res) => {
+  try {
+    if (await dashboardRoutes(req, res)) return;
+  } catch (e) {
+    res.writeHead(500).end((e as Error).message);
+    return;
+  }
+  yoga(req, res);
+}).listen(port, () => console.log(`GraphQL API on http://localhost:${port}/graphql, dashboard on http://localhost:${port}/`));
