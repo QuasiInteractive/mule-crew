@@ -14,7 +14,8 @@
     "guardrails": "tsx eval/guardrails.ts",
     "retire": "tsx src/retire.ts",
     "artwork-eval": "tsx eval/artworkEval.ts",
-    "snapshot": "tsx src/snapshot.ts"
+    "snapshot": "tsx src/snapshot.ts",
+    "demo": "tsx src/demo.ts"
   },
   "keywords": [],
   "author": "",

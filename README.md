@@ -22,6 +22,8 @@ npm run resolve-eval -- <model>       # resolution scoreboard (resets the shop)
 npm run guardrails                    # attack the API's limits directly
 npm run artwork-eval -- <model>       # artwork proofing scoreboard
 npm run retire [-- --dry-run]         # retire agents below their success threshold
+npm run demo -- ticket 27             # one ticket through triage + resolution, readable output
+npm run demo -- artwork art_15.png    # one artwork file: measurements, verdict, customer note
 ```
 
 ## Design notes
