@@ -37,7 +37,8 @@
   .section-note { color: var(--ink-2); margin: 0 0 16px; font-size: 14px; }
   .toolbar { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 13px; }
   button { font: inherit; font-size: 13px; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
-  button:hover { border-color: var(--axis); }
+  button:hover:not(:disabled) { border-color: var(--axis); }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
   button.primary { background: var(--ink); color: var(--page); border-color: var(--ink); }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
   .grid { display: grid; gap: 12px; }
@@ -286,14 +287,15 @@ async function load() {
     const res = await fetch(window.MULE_DATA_URL ?? 'dashboard.json', { cache: 'no-store' });
     snapshot = await res.json();
     [tiles, agents, changes, chart, policy, recent].forEach((f) => f(snapshot));
-    $('updated').textContent = 'Updated ' + new Date(snapshot.generatedAt).toLocaleTimeString();
+    $('updated').textContent = window.MULE_STATIC
+      ? 'Snapshot from ' + new Date(snapshot.generatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
+      : 'Updated ' + new Date(snapshot.generatedAt).toLocaleTimeString();
   } catch (e) {
     $('updated').innerHTML = `<span class="err">Couldn't load data: ${esc(e.message)}</span>`;
   }
 }
 
 async function retire(dry) {
-  if (window.MULE_STATIC) { $('retire-out').textContent = 'This is a snapshot: run the retire check on the live demo.'; return; }
   $('retire-out').textContent = 'Checking…';
   try {
     const res = await fetch('retire-check' + (dry ? '?dry=1' : ''), { method: 'POST' });
@@ -308,6 +310,12 @@ async function retire(dry) {
   }
 }
 
+if (window.MULE_STATIC) {
+  // The agents run on a local GPU, so the hosted copy is a frozen snapshot.
+  $('refresh').hidden = true;
+  $('dry').disabled = $('real').disabled = true;
+  $('retire-out').textContent = 'Snapshot: the retire check runs against the live database (see the video or run it locally).';
+}
 $('refresh').onclick = load;
 $('dry').onclick = () => retire(true);
 $('real').onclick = () => retire(false);

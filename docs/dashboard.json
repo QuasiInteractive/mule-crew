@@ -1,0 +1,290 @@
+{
+ "generatedAt": "2026-10-16T02:12:47.936Z",
+ "agents": [
+  {
+   "name": "artwork",
+   "model": "ollama/qwen3.5:9b",
+   "enabled": true,
+   "retiredReason": null,
+   "min": 0.85,
+   "runs": 30,
+   "rate": 0.9666666666666667,
+   "avgMs": 1645,
+   "costUsd": 0,
+   "action": "keep"
+  },
+  {
+   "name": "resolution",
+   "model": "ollama/qwen3.5:9b",
+   "enabled": true,
+   "retiredReason": null,
+   "min": 0.85,
+   "runs": 30,
+   "rate": 1,
+   "avgMs": 14477,
+   "costUsd": 0,
+   "action": "keep"
+  },
+  {
+   "name": "triage",
+   "model": "ollama/qwen3.5:9b",
+   "enabled": true,
+   "retiredReason": null,
+   "min": 0.85,
+   "runs": 30,
+   "rate": 1,
+   "avgMs": 9212,
+   "costUsd": 0,
+   "action": "keep"
+  }
+ ],
+ "shop": {
+  "tickets": 60,
+  "replies": 37,
+  "orderChanges": 2,
+  "reprints": 1,
+  "reprintUsd": 36,
+  "escalations": 27,
+  "spamClosed": 10
+ },
+ "totalRuns": 407,
+ "totalCostUsd": 0,
+ "recent": [
+  {
+   "id": 407,
+   "at": "2026-10-16T02:08:48.690Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 8314,
+   "note": "Customer requested to change order 150 from 3x3 to 2x2 size"
+  },
+  {
+   "id": 406,
+   "at": "2026-10-16T02:08:40.374Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 3513,
+   "note": "Order #102 for Elvira Kuvalis has been delivered (tracking TB4EN2AZRW3P)"
+  },
+  {
+   "id": 405,
+   "at": "2026-10-16T02:08:36.857Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 2712,
+   "note": "The ticket contains promotional SEO service advertising with no relation to the sticker shop; it is unsolicited marketing."
+  },
+  {
+   "id": 404,
+   "at": "2026-10-16T02:08:34.141Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 4201,
+   "note": "Customer requests background transparency to be applied before printing"
+  },
+  {
+   "id": 403,
+   "at": "2026-10-16T02:08:29.936Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 4114,
+   "note": "Customer Mr. Lavern Goyette requests a refund for order #15, claiming they were charged twice."
+  },
+  {
+   "id": 402,
+   "at": "2026-10-16T02:08:25.820Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 3917,
+   "note": "Customer reports that half of the stickers in order #25 are peeling at the edges upon arrival."
+  },
+  {
+   "id": 401,
+   "at": "2026-10-16T02:08:21.899Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": false,
+   "ms": 10324,
+   "note": "Invalid output (urgent: Invalid input: expected boolean, received undefined): {\n  \"category\": \"change_request\",\n  \"confidence\": 0.95,\n  \"order_id\": 30,\n  \"summa"
+  },
+  {
+   "id": 400,
+   "at": "2026-10-16T02:08:11.561Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 7295,
+   "note": "Order #37 for Mr. Lavern Goyette has already shipped (tracking: NRWT1LNOZXBL); it was created on 2026-09-20 and is en route."
+  },
+  {
+   "id": 399,
+   "at": "2026-10-16T02:08:04.263Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 5389,
+   "note": "Customer Christop Moen received a promotional message about winning a gift card and needs to claim it"
+  },
+  {
+   "id": 398,
+   "at": "2026-10-16T02:07:58.871Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 2623,
+   "note": "Customer Jaden Ullrich asks whether 72dpi resolution is suitable for 5-inch stickers."
+  },
+  {
+   "id": 397,
+   "at": "2026-10-16T02:07:56.244Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 5699,
+   "note": "Customer Nestor Blanda requests cancellation and refund for order 128"
+  },
+  {
+   "id": 396,
+   "at": "2026-10-16T02:07:50.543Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 3555,
+   "note": "The customer reports that the cut line on sticker #147 is cutting into their logo and requests a reprint."
+  },
+  {
+   "id": 395,
+   "at": "2026-10-16T02:07:46.986Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 11185,
+   "note": "Customer requested to change order 37 from 3x3 to 2x2 size"
+  },
+  {
+   "id": 394,
+   "at": "2026-10-16T02:07:35.767Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 4714,
+   "note": "Order 144 has already been delivered; it was created on 2026-09-25 and is marked as delivered."
+  },
+  {
+   "id": 393,
+   "at": "2026-10-16T02:07:31.050Z",
+   "agent": "triage:eval",
+   "model": "liquid/lfm-2.5-2.6b:free",
+   "ok": true,
+   "ms": 3646,
+   "note": "The ticket contains promotional SEO service claims without relation to sticker shop orders, indicating unsolicited marketing content."
+  }
+ ],
+ "policy": [
+  {
+   "key": "changeable_statuses",
+   "value": "proof_pending,approved"
+  },
+  {
+   "key": "max_reprint_usd",
+   "value": "150"
+  },
+  {
+   "key": "max_safe_zone_ink_pct",
+   "value": "1"
+  },
+  {
+   "key": "min_artwork_contrast",
+   "value": "3"
+  },
+  {
+   "key": "min_artwork_dpi",
+   "value": "150"
+  },
+  {
+   "key": "min_artwork_sharpness",
+   "value": "0.4"
+  }
+ ],
+ "history": {
+  "_note": "Scoreboard results that changed the design. Each entry is copied from the eval/*.txt file named in `source`.",
+  "changes": [
+   {
+    "agent": "triage",
+    "found": "7 of 60 answers failed validation, and 6 of those had the right category but dropped a required field",
+    "change": "Show the model its exact validation errors and give it one retry",
+    "before": {
+     "label": "accuracy",
+     "value": 88.3
+    },
+    "after": {
+     "label": "accuracy",
+     "value": 98.3
+    },
+    "source": "scoreboard_local_qwen.txt -> scoreboard_local_qwen_v2.txt"
+   },
+   {
+    "agent": "resolution",
+    "found": "It answered a customer from memory and invented the order's size",
+    "change": "The reply tool refuses until the order has been looked up (enforced in code)",
+    "source": "resolution_scoreboard_qwen.txt"
+   },
+   {
+    "agent": "resolution",
+    "found": "It twice reported 'reply sent' when the reply had been refused",
+    "change": "Every tool result is recorded; a run whose report claims an action that did not succeed is failed",
+    "source": "resolution_scoreboard_qwen.txt"
+   },
+   {
+    "agent": "artwork",
+    "found": "The vision model approved 7 of 22 bad files and caught 0 of 5 cut-line problems",
+    "change": "Code measures and decides (dpi, transparency, sharpness, contrast, safe zone); the model writes the customer note",
+    "before": {
+     "label": "bad files approved",
+     "value": 7
+    },
+    "after": {
+     "label": "bad files approved",
+     "value": 0
+    },
+    "source": "artwork_scoreboard_qwen_v1.txt -> artwork_scoreboard_qwen_v4.txt"
+   }
+  ],
+  "artworkVersions": [
+   {
+    "version": "v1",
+    "label": "Model decides",
+    "verdictPct": 71.9,
+    "badApproved": 7,
+    "goodRejected": 2
+   },
+   {
+    "version": "v2",
+    "label": "+ blur, contrast",
+    "verdictPct": 78.1,
+    "badApproved": 4,
+    "goodRejected": 2
+   },
+   {
+    "version": "v3",
+    "label": "+ safe zone",
+    "verdictPct": 90.6,
+    "badApproved": 0,
+    "goodRejected": 2
+   },
+   {
+    "version": "v4",
+    "label": "Code decides",
+    "verdictPct": 100,
+    "badApproved": 0,
+    "goodRejected": 0
+   }
+  ]
+ }
+}

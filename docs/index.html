@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mule Crew</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
+    --series-1: #2a78d6; --series-1-track: #cde2fb;
+    --good: #0ca30c; --good-text: #006300; --critical: #d03b3b; --warning: #fab219;
+    --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+      --series-1: #3987e5; --series-1-track: #184f95; --good-text: #0ca30c;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5; --series-1-track: #184f95; --good-text: #0ca30c;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1120px; margin: 0 auto; padding: 32px 16px 64px; }
+  header { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; }
+  h1 { margin: 0; font-size: 28px; letter-spacing: -0.01em; }
+  h2 { font-size: 17px; margin: 40px 0 6px; }
+  .sub { color: var(--ink-2); margin: 4px 0 0; max-width: 640px; }
+  .section-note { color: var(--ink-2); margin: 0 0 16px; font-size: 14px; }
+  .toolbar { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 13px; }
+  button { font: inherit; font-size: 13px; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+  button:hover:not(:disabled) { border-color: var(--axis); }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  button.primary { background: var(--ink); color: var(--page); border-color: var(--ink); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .grid { display: grid; gap: 12px; }
+  .tiles { grid-template-columns: 1.4fr repeat(5, 1fr); }
+  @media (max-width: 900px) { .tiles { grid-template-columns: repeat(3, 1fr); } .tiles .hero { grid-column: 1 / -1; } }
+  @media (max-width: 520px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  .tile-label { color: var(--ink-2); font-size: 13px; }
+  .tile-value { font-size: 26px; font-weight: 600; margin-top: 2px; }
+  .tile-foot { color: var(--muted); font-size: 12px; }
+  .hero .tile-value { font-size: 48px; line-height: 1.05; }
+  .agents { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 900px) { .agents { grid-template-columns: 1fr; } }
+  .agent-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .agent-name { font-weight: 600; font-size: 17px; text-transform: capitalize; }
+  .model { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+  .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+  .badge svg { flex: none; }
+  .rate { font-size: 34px; font-weight: 600; margin: 14px 0 2px; }
+  .rate small { font-size: 14px; font-weight: 400; color: var(--ink-2); }
+  .meter { position: relative; height: 8px; border-radius: 4px; background: var(--series-1-track); margin: 10px 0 4px; }
+  .meter .fill { position: absolute; inset: 0 auto 0 0; border-radius: 4px; }
+  .meter .tick { position: absolute; top: -5px; width: 2px; height: 18px; background: var(--ink); border-radius: 1px; }
+  .meter-scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); position: relative; height: 16px; }
+  .meter-scale .tick-label { position: absolute; transform: translateX(calc(-100% + 1px)); padding-right: 6px; color: var(--ink-2); white-space: nowrap; }
+  .agent-meta { color: var(--muted); font-size: 12px; margin-top: 10px; }
+  .agent-job { color: var(--ink-2); font-size: 13px; margin: 8px 0 0; }
+  .retired-reason { color: var(--ink); font-size: 13px; margin-top: 8px; }
+  .retire-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; }
+  #retire-out { font-size: 13px; color: var(--ink-2); }
+  .changes { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 760px) { .changes { grid-template-columns: 1fr; } }
+  .change-agent { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .change-found { margin: 6px 0; }
+  .change-fix { color: var(--ink-2); font-size: 14px; margin: 0; }
+  .change-fix b { color: var(--ink); font-weight: 600; }
+  .delta { margin-top: 10px; font-size: 13px; color: var(--ink-2); }
+  .delta strong { color: var(--ink); }
+  .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 12px; }
+  @media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
+  .chart-title { font-weight: 600; margin: 0; }
+  .chart-sub { color: var(--ink-2); font-size: 13px; margin: 2px 0 8px; }
+  #chart { position: relative; }
+  #chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .tooltip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); opacity: 0; transition: opacity 0.1s; min-width: 180px; }
+  .tooltip b { font-size: 13px; }
+  .tooltip .row { display: flex; justify-content: space-between; gap: 12px; color: var(--ink-2); }
+  .tooltip .row span:last-child { color: var(--ink); font-variant-numeric: tabular-nums; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-weight: 500; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  td { padding: 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  td.note { color: var(--ink-2); max-width: 420px; }
+  .table-wrap { overflow-x: auto; }
+  .policy td:first-child { color: var(--ink-2); }
+  .policy td:last-child { font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; white-space: nowrap; }
+  footer { margin-top: 40px; color: var(--muted); font-size: 12px; }
+  .err { color: var(--critical); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>Mule Crew</h1>
+      <p class="sub">AI agents running a synthetic sticker shop. Every run is measured, and an agent that falls below its success line is retired and its work goes back to humans.</p>
+    </div>
+    <div class="toolbar">
+      <span id="updated">Loading…</span>
+      <button id="refresh">Refresh</button>
+      <button id="theme" title="Switch light / dark">Theme</button>
+    </div>
+  </header>
+
+  <section class="grid tiles" id="tiles"></section>
+
+  <h2>The crew</h2>
+  <p class="section-note">Success rate over each agent's last 30 runs on its current model, live and eval. The line is its retirement threshold.</p>
+  <section class="grid agents" id="agents"></section>
+  <div class="retire-bar">
+    <button id="dry">Run retire check (dry run)</button>
+    <button id="real" class="primary">Run retire check</button>
+    <span id="retire-out"></span>
+  </div>
+
+  <h2>What the scoreboard changed</h2>
+  <p class="section-note">Each fix below came from a failure the scoreboard showed. None of them were planned up front.</p>
+  <section class="grid changes" id="changes"></section>
+
+  <div class="split" style="margin-top:12px">
+    <div class="card">
+      <p class="chart-title">Artwork agent: bad files approved</p>
+      <p class="chart-sub">Out of 22 bad files in the 32-file test set, by version. Bad files that get approved go to print.</p>
+      <div id="chart"></div>
+    </div>
+    <div class="card">
+      <p class="chart-title">Limits the API enforces</p>
+      <p class="chart-sub">Enforced in code, not the prompt, so a model that ignores its instructions still can't go past them.</p>
+      <table class="policy" id="policy"></table>
+    </div>
+  </div>
+
+  <h2>Recent agent runs</h2>
+  <div class="card table-wrap"><table id="recent"></table></div>
+
+  <footer>All shop data is synthetic. Models run locally via Ollama (qwen3.5 9B) or through OpenRouter.</footer>
+</main>
+
+<script>window.MULE_STATIC = true;</script>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = new Intl.NumberFormat('en-US');
+const usd = (n) => '$' + n.toFixed(2);
+const secs = (ms) => ms == null ? '-' : (ms / 1000).toFixed(1) + 's';
+const JOBS = {
+  triage: 'Reads each ticket, looks up the order and sorts it into one of six categories.',
+  resolution: 'Handles the ticket with tools: changes orders, issues reprints, replies, or escalates.',
+  artwork: 'Proofs uploads. Code measures and decides; the model writes the customer\'s fix-it note.',
+};
+
+// Status always travels with an icon and a label, never colour alone.
+const ICON = {
+  good: '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="7" fill="var(--good)"/><path d="M4 7.2l2 2 4-4.4" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  critical: '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="7" fill="var(--critical)"/><path d="M4.6 4.6l4.8 4.8M9.4 4.6l-4.8 4.8" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>',
+  warning: '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1l6.5 12h-13z" fill="var(--warning)"/><path d="M7 5.5v3.2M7 10.6v.1" stroke="#0b0b0b" stroke-width="1.6" stroke-linecap="round"/></svg>',
+};
+const badge = (kind, label) => `<span class="badge">${ICON[kind]}${esc(label)}</span>`;
+
+function tiles(d) {
+  const s = d.shop;
+  const t = (label, value, foot = '', cls = '') =>
+    `<div class="card ${cls}"><div class="tile-label">${label}</div><div class="tile-value">${value}</div>${foot ? `<div class="tile-foot">${foot}</div>` : ''}</div>`;
+  $('tiles').innerHTML =
+    t('Agent runs measured', fmt.format(d.totalRuns), `Model spend so far: ${usd(d.totalCostUsd)}`, 'hero') +
+    t('Replies sent', fmt.format(s.replies)) +
+    t('Orders changed', fmt.format(s.orderChanges), 'before printing only') +
+    t('Free reprints', fmt.format(s.reprints), `${usd(s.reprintUsd)} of stickers`) +
+    t('Escalated to humans', fmt.format(s.escalations)) +
+    t('Spam closed', fmt.format(s.spamClosed), 'never replied to');
+}
+
+function agents(d) {
+  $('agents').innerHTML = d.agents.map((a) => {
+    const pct = a.rate == null ? null : a.rate * 100;
+    const min = a.min * 100;
+    const below = pct != null && pct < min;
+    const status = !a.enabled ? badge('critical', 'Retired')
+      : a.action === 'RETIRE' ? badge('warning', 'Below line: retire on next check')
+      : a.rate == null ? badge('warning', 'No runs yet')
+      : badge('good', 'Active');
+    const fill = pct == null ? '' : `<div class="fill" style="width:${pct}%;background:${below ? 'var(--critical)' : 'var(--series-1)'}"></div>`;
+    return `<div class="card">
+      <div class="agent-head"><span class="agent-name">${esc(a.name)}</span>${status}</div>
+      <div class="model">${esc(a.model)}</div>
+      <p class="agent-job">${esc(JOBS[a.name] ?? '')}</p>
+      <div class="rate">${pct == null ? '–' : pct.toFixed(1) + '%'} <small>success</small></div>
+      <div class="meter" role="img" aria-label="${pct == null ? 'no data' : pct.toFixed(1) + '% success'}, retirement line ${min.toFixed(0)}%">
+        ${fill}<div class="tick" style="left:calc(${min}% - 1px)"></div>
+      </div>
+      <div class="meter-scale"><span class="tick-label" style="left:${min}%">retire below ${min.toFixed(0)}%</span></div>
+      <div class="agent-meta">${a.runs} runs · avg ${secs(a.avgMs)} · ${usd(a.costUsd)}</div>
+      ${!a.enabled && a.retiredReason ? `<div class="retired-reason">${esc(a.retiredReason)}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function changes(d) {
+  $('changes').innerHTML = d.history.changes.map((c) => `<div class="card">
+    <div class="change-agent">${esc(c.agent)} agent</div>
+    <p class="change-found">${esc(c.found)}.</p>
+    <p class="change-fix"><b>Fix:</b> ${esc(c.change)}.</p>
+    ${c.before ? `<div class="delta">${esc(c.after.label)}: ${c.before.value}${c.before.label === 'accuracy' ? '%' : ''} → <strong>${c.after.value}${c.after.label === 'accuracy' ? '%' : ''}</strong></div>` : ''}
+  </div>`).join('');
+}
+
+function chart(d) {
+  const rows = d.history.artworkVersions;
+  const W = 520, H = 260, L = 36, R = 8, T = 16, B = 52;
+  const max = 8, iw = W - L - R, ih = H - T - B, band = iw / rows.length, bw = Math.min(24, band * 0.5);
+  const y = (v) => T + ih - (v / max) * ih;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Bad files approved by version: ${rows.map((r) => `${r.version} ${r.badApproved}`).join(', ')}">`;
+  for (const v of [0, 2, 4, 6, 8]) {
+    svg += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${v === 0 ? 'var(--axis)' : 'var(--grid)'}" stroke-width="1"/>`;
+    svg += `<text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)" style="font-variant-numeric:tabular-nums">${v}</text>`;
+  }
+  rows.forEach((r, i) => {
+    const cx = L + band * i + band / 2, x = cx - bw / 2, top = y(r.badApproved), h = T + ih - top;
+    if (h > 0) {
+      // 4px rounded data end, square at the baseline.
+      const rr = Math.min(4, h);
+      svg += `<path d="M${x},${T + ih} V${top + rr} Q${x},${top} ${x + rr},${top} H${x + bw - rr} Q${x + bw},${top} ${x + bw},${top + rr} V${T + ih} Z" fill="var(--series-1)"/>`;
+    }
+    svg += `<text x="${cx}" y="${top - 6}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${r.badApproved}</text>`;
+    svg += `<text x="${cx}" y="${T + ih + 18}" text-anchor="middle" font-size="12" fill="var(--ink)">${esc(r.version)}</text>`;
+    svg += `<text x="${cx}" y="${T + ih + 34}" text-anchor="middle" font-size="11" fill="var(--muted)">${esc(r.label)}</text>`;
+    svg += `<rect class="hit" data-i="${i}" x="${L + band * i}" y="${T}" width="${band}" height="${ih + 40}" fill="transparent"/>`;
+  });
+  svg += '</svg><div class="tooltip" id="tip"></div>';
+  $('chart').innerHTML = svg;
+  const tip = $('tip');
+  $('chart').querySelectorAll('.hit').forEach((el) => {
+    el.addEventListener('mousemove', (e) => {
+      const r = rows[+el.dataset.i], box = $('chart').getBoundingClientRect();
+      tip.innerHTML = `<b>${esc(r.version)}: ${esc(r.label)}</b>
+        <div class="row"><span>Verdicts right</span><span>${r.verdictPct}%</span></div>
+        <div class="row"><span>Bad files approved</span><span>${r.badApproved}</span></div>
+        <div class="row"><span>Good files rejected</span><span>${r.goodRejected}</span></div>`;
+      const x = Math.min(e.clientX - box.left + 12, box.width - 200);
+      tip.style.left = Math.max(0, x) + 'px';
+      tip.style.top = (e.clientY - box.top - 70) + 'px';
+      tip.style.opacity = 1;
+    });
+    el.addEventListener('mouseleave', () => { tip.style.opacity = 0; });
+  });
+}
+
+const POLICY_LABELS = {
+  max_reprint_usd: ['Largest order the agent can reprint free', (v) => '$' + v],
+  changeable_statuses: ['Orders can change while', (v) => v.split(',').map((s) => s.replace('_', ' ')).join(' or ')],
+  min_artwork_dpi: ['Minimum artwork resolution', (v) => v + ' dpi'],
+  min_artwork_sharpness: ['Minimum edge sharpness (1 = crisp)', (v) => v],
+  min_artwork_contrast: ['Minimum text contrast (WCAG)', (v) => v + ':1'],
+  max_safe_zone_ink_pct: ['Ink allowed within 1/8" of the cut line', (v) => v + '%'],
+};
+function policy(d) {
+  $('policy').innerHTML = '<tbody>' + d.policy.map((p) => {
+    const [label, f] = POLICY_LABELS[p.key] ?? [p.key, (v) => v];
+    return `<tr><td>${esc(label)}</td><td>${esc(f(p.value))}</td></tr>`;
+  }).join('') + '<tr><td>Refunds</td><td>always a human</td></tr><tr><td>Reprints per order</td><td>1</td></tr></tbody>';
+}
+
+function recent(d) {
+  const when = (iso) => new Date(iso).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  $('recent').innerHTML = `<thead><tr><th>When</th><th>Agent</th><th>Model</th><th>Result</th><th style="text-align:right">Time</th><th>Output</th></tr></thead><tbody>` +
+    d.recent.map((r) => `<tr>
+      <td class="num" style="text-align:left">${when(r.at)}</td>
+      <td>${esc(r.agent.replace(':eval', ''))}${r.agent.endsWith(':eval') ? ' <span style="color:var(--muted)">eval</span>' : ''}</td>
+      <td class="model">${esc(r.model)}</td>
+      <td>${r.ok ? badge('good', 'Passed') : badge('critical', 'Failed')}</td>
+      <td class="num">${secs(r.ms)}</td>
+      <td class="note">${esc(r.note)}</td></tr>`).join('') + '</tbody>';
+}
+
+let snapshot = null;
+async function load() {
+  try {
+    const res = await fetch(window.MULE_DATA_URL ?? 'dashboard.json', { cache: 'no-store' });
+    snapshot = await res.json();
+    [tiles, agents, changes, chart, policy, recent].forEach((f) => f(snapshot));
+    $('updated').textContent = window.MULE_STATIC
+      ? 'Snapshot from ' + new Date(snapshot.generatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
+      : 'Updated ' + new Date(snapshot.generatedAt).toLocaleTimeString();
+  } catch (e) {
+    $('updated').innerHTML = `<span class="err">Couldn't load data: ${esc(e.message)}</span>`;
+  }
+}
+
+async function retire(dry) {
+  $('retire-out').textContent = 'Checking…';
+  try {
+    const res = await fetch('retire-check' + (dry ? '?dry=1' : ''), { method: 'POST' });
+    const rows = await res.json();
+    const retire = rows.filter((r) => r.action === 'RETIRE');
+    $('retire-out').textContent = retire.length
+      ? (dry ? 'Would retire: ' : 'Retired: ') + retire.map((r) => `${r.name} (${(r.rate * 100).toFixed(1)}% < ${(r.min * 100).toFixed(0)}%)`).join(', ')
+      : 'Every active agent is above its line. Nothing retired.';
+    if (!dry) load();
+  } catch (e) {
+    $('retire-out').innerHTML = `<span class="err">${esc(e.message)}</span>`;
+  }
+}
+
+if (window.MULE_STATIC) {
+  // The agents run on a local GPU, so the hosted copy is a frozen snapshot.
+  $('refresh').hidden = true;
+  $('dry').disabled = $('real').disabled = true;
+  $('retire-out').textContent = 'Snapshot: the retire check runs against the live database (see the video or run it locally).';
+}
+$('refresh').onclick = load;
+$('dry').onclick = () => retire(true);
+$('real').onclick = () => retire(false);
+$('theme').onclick = () => {
+  const dark = document.documentElement.dataset.theme
+    ? document.documentElement.dataset.theme === 'dark'
+    : matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+  try { localStorage.setItem('mule-theme', document.documentElement.dataset.theme); } catch {}
+};
+try { const t = localStorage.getItem('mule-theme'); if (t) document.documentElement.dataset.theme = t; } catch {}
+load();
+</script>
+</body>
+</html>
