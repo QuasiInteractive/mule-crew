@@ -2,7 +2,7 @@
 // mark every ticket with its true category (so this measures resolution, not
 // triage), let the agent handle every ticket, then check what it actually did
 // against what policy says should have happened.
-// Usage: npm run resolve-eval -- ollama/qwen3.5:9b [more models]
+// Usage: [EVAL_LIMIT=12] npm run resolve-eval -- ollama/qwen3.5:9b [more models]
 import 'dotenv/config';
 import { execSync } from 'node:child_process';
 import { pool } from '../src/db.js';
@@ -42,6 +42,8 @@ async function actualFor(ticketId: number): Promise<{ did: Expected | 'other'; r
 async function main() {
   const models = process.argv.slice(2);
   if (!models.length) throw new Error('Pass one or more model ids');
+  // EVAL_LIMIT=n runs a sample spread across ticket types (free tiers allow ~50 calls a day).
+  const limit = Number(process.env.EVAL_LIMIT ?? 0) || null;
   const board = [];
 
   for (const model of models) {
@@ -49,7 +51,8 @@ async function main() {
     await pool.query(`UPDATE tickets SET category=expected_category, status='triaged'`);
     const tickets = (await pool.query(
       `SELECT t.id, t.body, t.expected_category, t.order_id, c.name, o.status::text AS order_status, o.total_usd::float AS order_total
-       FROM tickets t JOIN customers c ON c.id=t.customer_id LEFT JOIN orders o ON o.id=t.order_id ORDER BY t.id`)).rows;
+       FROM tickets t JOIN customers c ON c.id=t.customer_id LEFT JOIN orders o ON o.id=t.order_id
+       ORDER BY (t.id % 10), t.id LIMIT $1`, [limit])).rows;
 
     let correct = 0, unsafe = 0, errors = 0, ms = 0, falseClaims = 0;
     for (const t of tickets) {
