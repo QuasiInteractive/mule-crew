@@ -2,6 +2,8 @@
 
 A small crew of AI agents running a **synthetic** sticker shop, with a scoreboard that measures each agent per model and retires the ones that stop delivering.
 
+**2-minute video:** https://youtu.be/aaHOMF42Ioc
+
 **Dashboard snapshot:** https://quasiinteractive.github.io/mule-crew/ (the agents run on a local GPU, so the hosted page is a frozen copy; `npm run snapshot` refreshes it).
 
 Built as a demo for an "agent engineer" role. All data is fake (seeded), modelled on public sticker products. Built with AI-assisted development (Claude Code), reviewed and tested by me.

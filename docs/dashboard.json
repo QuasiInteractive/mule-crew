@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-16T02:12:47.936Z",
+ "generatedAt": "2026-10-16T04:44:56.297Z",
  "agents": [
   {
    "name": "artwork",
@@ -9,7 +9,7 @@
    "min": 0.85,
    "runs": 30,
    "rate": 0.9666666666666667,
-   "avgMs": 1645,
+   "avgMs": 1891,
    "costUsd": 0,
    "action": "keep"
   },
@@ -20,8 +20,8 @@
    "retiredReason": null,
    "min": 0.85,
    "runs": 30,
-   "rate": 1,
-   "avgMs": 14477,
+   "rate": 0.8666666666666667,
+   "avgMs": 19688,
    "costUsd": 0,
    "action": "keep"
   },
@@ -33,157 +33,157 @@
    "min": 0.85,
    "runs": 30,
    "rate": 1,
-   "avgMs": 9212,
+   "avgMs": 11288,
    "costUsd": 0,
    "action": "keep"
   }
  ],
  "shop": {
   "tickets": 60,
-  "replies": 37,
-  "orderChanges": 2,
+  "replies": 4,
+  "orderChanges": 0,
   "reprints": 1,
   "reprintUsd": 36,
-  "escalations": 27,
-  "spamClosed": 10
+  "escalations": 3,
+  "spamClosed": 0
  },
- "totalRuns": 407,
+ "totalRuns": 422,
  "totalCostUsd": 0,
  "recent": [
   {
-   "id": 407,
-   "at": "2026-10-16T02:08:48.690Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
+   "id": 422,
+   "at": "2026-10-16T04:23:40.786Z",
+   "agent": "artwork",
+   "model": "ollama/qwen3.5:9b",
    "ok": true,
-   "ms": 8314,
-   "note": "Customer requested to change order 150 from 3x3 to 2x2 size"
+   "ms": 2006,
+   "note": "Your artwork looks great, except for the text right at the edge. Please move it slightly inward to give us some room around the cut line."
   },
   {
-   "id": 406,
-   "at": "2026-10-16T02:08:40.374Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
-   "ok": true,
-   "ms": 3513,
-   "note": "Order #102 for Elvira Kuvalis has been delivered (tracking TB4EN2AZRW3P)"
-  },
-  {
-   "id": 405,
-   "at": "2026-10-16T02:08:36.857Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
-   "ok": true,
-   "ms": 2712,
-   "note": "The ticket contains promotional SEO service advertising with no relation to the sticker shop; it is unsolicited marketing."
-  },
-  {
-   "id": 404,
-   "at": "2026-10-16T02:08:34.141Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
-   "ok": true,
-   "ms": 4201,
-   "note": "Customer requests background transparency to be applied before printing"
-  },
-  {
-   "id": 403,
-   "at": "2026-10-16T02:08:29.936Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
-   "ok": true,
-   "ms": 4114,
-   "note": "Customer Mr. Lavern Goyette requests a refund for order #15, claiming they were charged twice."
-  },
-  {
-   "id": 402,
-   "at": "2026-10-16T02:08:25.820Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
-   "ok": true,
-   "ms": 3917,
-   "note": "Customer reports that half of the stickers in order #25 are peeling at the edges upon arrival."
-  },
-  {
-   "id": 401,
-   "at": "2026-10-16T02:08:21.899Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
+   "id": 421,
+   "at": "2026-10-16T04:23:24.979Z",
+   "agent": "resolution",
+   "model": "ollama/qwen3.5:9b",
    "ok": false,
-   "ms": 10324,
-   "note": "Invalid output (urgent: Invalid input: expected boolean, received undefined): {\n  \"category\": \"change_request\",\n  \"confidence\": 0.95,\n  \"order_id\": 30,\n  \"summa"
+   "ms": 91761,
+   "note": "Claimed issue_reprint but it did not succeed. issue_reprint: Order value $360 is over the $150 reprint limit. Escalate to a human."
   },
   {
-   "id": 400,
-   "at": "2026-10-16T02:08:11.561Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
+   "id": 420,
+   "at": "2026-10-16T04:21:53.192Z",
+   "agent": "triage",
+   "model": "ollama/qwen3.5:9b",
    "ok": true,
-   "ms": 7295,
-   "note": "Order #37 for Mr. Lavern Goyette has already shipped (tracking: NRWT1LNOZXBL); it was created on 2026-09-20 and is en route."
+   "ms": 10649,
+   "note": "Customer reports half of their received stickers are peeling at the edges"
   },
   {
-   "id": 399,
-   "at": "2026-10-16T02:08:04.263Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
-   "ok": true,
-   "ms": 5389,
-   "note": "Customer Christop Moen received a promotional message about winning a gift card and needs to claim it"
+   "id": 419,
+   "at": "2026-10-16T04:21:32.817Z",
+   "agent": "resolution",
+   "model": "ollama/qwen3.5:9b",
+   "ok": false,
+   "ms": 32669,
+   "note": "Claimed issue_reprint but it did not succeed. issue_reprint: This order has already had a reprint. Escalate to a human."
   },
   {
-   "id": 398,
-   "at": "2026-10-16T02:07:58.871Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
+   "id": 418,
+   "at": "2026-10-16T04:21:00.115Z",
+   "agent": "triage",
+   "model": "ollama/qwen3.5:9b",
    "ok": true,
-   "ms": 2623,
-   "note": "Customer Jaden Ullrich asks whether 72dpi resolution is suitable for 5-inch stickers."
+   "ms": 15963,
+   "note": "Customer reports blurry prints and color issues on received stickers from order #2"
   },
   {
-   "id": 397,
-   "at": "2026-10-16T02:07:56.244Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
+   "id": 417,
+   "at": "2026-10-16T04:14:54.132Z",
+   "agent": "artwork",
+   "model": "ollama/qwen3.5:9b",
    "ok": true,
-   "ms": 5699,
-   "note": "Customer Nestor Blanda requests cancellation and refund for order 128"
+   "ms": 3036,
+   "note": "We noticed some of the text is too close to the edge. Please move it a little inward from the cut line so it doesn’t get trimmed off during production. Once fix"
   },
   {
-   "id": 396,
-   "at": "2026-10-16T02:07:50.543Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
-   "ok": true,
-   "ms": 3555,
-   "note": "The customer reports that the cut line on sticker #147 is cutting into their logo and requests a reprint."
+   "id": 416,
+   "at": "2026-10-16T04:14:29.276Z",
+   "agent": "resolution",
+   "model": "ollama/qwen3.5:9b",
+   "ok": false,
+   "ms": 25439,
+   "note": "Claimed issue_reprint but it did not succeed. issue_reprint: Order value $360 is over the $150 reprint limit. Escalate to a human."
   },
   {
-   "id": 395,
-   "at": "2026-10-16T02:07:46.986Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
+   "id": 415,
+   "at": "2026-10-16T04:14:03.818Z",
+   "agent": "triage",
+   "model": "ollama/qwen3.5:9b",
    "ok": true,
-   "ms": 11185,
-   "note": "Customer requested to change order 37 from 3x3 to 2x2 size"
+   "ms": 13874,
+   "note": "Customer Jaden Ullrich reported peeling edges on half of the die-cut stickers from order #116."
   },
   {
-   "id": 394,
-   "at": "2026-10-16T02:07:35.767Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
+   "id": 414,
+   "at": "2026-10-16T04:13:08.125Z",
+   "agent": "resolution",
+   "model": "ollama/qwen3.5:9b",
    "ok": true,
-   "ms": 4714,
-   "note": "Order 144 has already been delivered; it was created on 2026-09-25 and is marked as delivered."
+   "ms": 16482,
+   "note": "Issued a free reprint for Milton's order 2 due to blurry stickers and incorrect colours, then sent an apology and confirmation."
   },
   {
-   "id": 393,
-   "at": "2026-10-16T02:07:31.050Z",
-   "agent": "triage:eval",
-   "model": "liquid/lfm-2.5-2.6b:free",
+   "id": 413,
+   "at": "2026-10-16T04:12:51.611Z",
+   "agent": "triage",
+   "model": "ollama/qwen3.5:9b",
    "ok": true,
-   "ms": 3646,
-   "note": "The ticket contains promotional SEO service claims without relation to sticker shop orders, indicating unsolicited marketing content."
+   "ms": 39519,
+   "note": "Customer reports blurry print and color issues on delivered order #2 stickers."
+  },
+  {
+   "id": 412,
+   "at": "2026-10-16T02:24:23.784Z",
+   "agent": "artwork",
+   "model": "ollama/qwen3.5:9b",
+   "ok": true,
+   "ms": 8007,
+   "note": "The background is clean and the file quality looks great! Just please move the 'LOFI CLUB' text a little inward, at least 1/8 inch from the edges, so it won’t g"
+  },
+  {
+   "id": 411,
+   "at": "2026-10-16T02:24:12.658Z",
+   "agent": "resolution",
+   "model": "ollama/qwen3.5:9b",
+   "ok": false,
+   "ms": 73694,
+   "note": "Claimed issue_reprint but it did not succeed. issue_reprint: Order value $360 is over the $150 reprint limit. Escalate to a human."
+  },
+  {
+   "id": 410,
+   "at": "2026-10-16T02:22:58.934Z",
+   "agent": "triage",
+   "model": "ollama/qwen3.5:9b",
+   "ok": true,
+   "ms": 12413,
+   "note": "Jaden Ullrich reports order #116 stickers arriving with half of them peeling at the edges."
+  },
+  {
+   "id": 409,
+   "at": "2026-10-16T02:22:43.743Z",
+   "agent": "resolution",
+   "model": "ollama/qwen3.5:9b",
+   "ok": true,
+   "ms": 21716,
+   "note": "Order 2 for customer Milton Towne was verified, a free reprint was issued due to quality issues (blurry and off-colour), and a confirmation reply was sent."
+  },
+  {
+   "id": 408,
+   "at": "2026-10-16T02:22:21.998Z",
+   "agent": "triage",
+   "model": "ollama/qwen3.5:9b",
+   "ok": true,
+   "ms": 24355,
+   "note": "The customer is reporting blurry prints and colour issues on their delivered order #2 of die-cut stickers."
   }
  ],
  "policy": [
